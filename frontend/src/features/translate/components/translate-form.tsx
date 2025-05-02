@@ -26,7 +26,7 @@ const TranslateForm = () => {
       const result = await translateText(originalText);
       setTranslated(result);
     } catch (err) {
-      console.error(err);
+      console.error("error", err);
     } finally {
       setLoading(false);
     }
