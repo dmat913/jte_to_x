@@ -1,7 +1,5 @@
 import TranslateForm from "@/features/translate/components/translate-form";
 import { Metadata } from "next";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -38,10 +36,5 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function TranslatePage() {
-  return (
-    <div className="p-4 h-screen relative overflow-hidden flex items-center justify-center">
-      <TranslateForm />
-      <ToastContainer />
-    </div>
-  );
+  return <TranslateForm />;
 }

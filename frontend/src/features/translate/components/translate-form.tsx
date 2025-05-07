@@ -36,7 +36,7 @@ const TranslateForm = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 md:gap-8 w-full">
+    <div className="flex flex-col items-center justify-center gap-4 md:gap-8 w-full flex-1 p-4">
       {translated ? (
         <div className="relative">
           <Typewriter words={[translated]} typeSpeed={70} delaySpeed={1000} />
