@@ -2,9 +2,12 @@
 import { translateText } from "@/lib/translate.api";
 import { useState } from "react";
 import { RiTranslateAi2 } from "react-icons/ri";
+import { IoIosClose } from "react-icons/io";
 import { usePlaceholderAnimation } from "../hooks/usePlaceholderAnimation";
 import { placeholders } from "../data/placeholders";
 import { IoCopyOutline } from "react-icons/io5";
+import { Typewriter } from "react-simple-typewriter";
+import { handleCopy } from "@/utils/clipboard";
 
 const TranslateForm = () => {
   // original text in Japanese
@@ -33,19 +36,25 @@ const TranslateForm = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 md:gap-8">
+    <div className="flex flex-col gap-4 md:gap-8 w-full">
       {translated ? (
         <div className="relative">
-          <span className="font-semibold text-gray-700 text-2xl md:text-5xl">
-            {translated}
-          </span>
+          <Typewriter words={[translated]} typeSpeed={70} delaySpeed={1000} />
         </div>
       ) : (
-        <span className="font-semibold text-gray-700 text-2xl md:text-5xl">
-          Enter your <span className="text-yellow-500">Japanese Text</span> to
-          translate into <span className="text-yellow-500">English</span> for
-          your Dairy Records!
-        </span>
+        <>
+          {loading ? (
+            <div className="flex justify-start">
+              <div className="w-3 h-3 bg-black rounded-full animate-bounce"></div>
+            </div>
+          ) : (
+            <span className="font-semibold text-gray-700 text-2xl md:text-5xl">
+              Enter your <span className="text-yellow-500">Japanese Text</span>{" "}
+              to translate into <span className="text-yellow-500">English</span>{" "}
+              for your Dairy Records!
+            </span>
+          )}
+        </>
       )}
       <form
         onSubmit={handleSubmit}
@@ -56,26 +65,35 @@ const TranslateForm = () => {
           value={originalText}
           onChange={(e) => setOriginalText(e.target.value)}
           placeholder={placeholder}
-          className={`w-full h-12 outline-0 resize-none text-sm transition-opacity duration-500 ${
+          className={`w-full h-12 outline-0 resize-none text-base transition-opacity duration-500 ${
             fade || !!originalText.length ? "opacity-100" : "opacity-0"
           }`}
         />
-        <button
-          disabled={!translated}
-          onClick={() => {
-            navigator.clipboard.writeText(translated);
-          }}
-          className="absolute bottom-2 right-16 p-2 border border-gray-200 rounded-full disabled:opacity-50"
-        >
-          <IoCopyOutline size={24} />
-        </button>
-        <button
-          type="submit"
-          disabled={loading}
-          className="absolute bottom-2 right-2 p-2 border border-gray-200 rounded-full disabled:opacity-50"
-        >
-          <RiTranslateAi2 size={24} />
-        </button>
+        <div className="absolute bottom-2 right-2 flex items-center gap-2">
+          <button
+            type="button"
+            disabled={!originalText.length}
+            onClick={() => setOriginalText("")}
+            className="p-2 border border-gray-200 rounded-full disabled:opacity-50"
+          >
+            <IoIosClose size={20} />
+          </button>
+          <button
+            type="button"
+            disabled={!translated}
+            onClick={() => handleCopy(translated)}
+            className="p-2 border border-gray-200 rounded-full disabled:opacity-50"
+          >
+            <IoCopyOutline size={20} />
+          </button>
+          <button
+            type="submit"
+            disabled={loading || originalText.length === 0}
+            className="p-2 border border-yellow-200 rounded-full disabled:opacity-50 bg-yellow-500"
+          >
+            <RiTranslateAi2 size={20} />
+          </button>
+        </div>
       </form>
     </div>
   );
